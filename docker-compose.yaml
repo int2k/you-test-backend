@@ -1,0 +1,56 @@
+version: '3.8'
+services:
+  # app service for your backend
+  app:
+    container_name: backend
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_NAME: db_you_test
+      DATABASE_USER: db_you_test
+      DATABASE_PASS: db_you_test_pass
+      DATABASE_URI: mongodb://database:27017
+    ports:
+      - '4000:4000'
+    depends_on:
+      - database
+
+  # start the mongodb service as container
+  database:
+    image: docker.io/library/mongo:6.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: db_you_test
+      MONGO_INITDB_ROOT_PASSWORD: db_you_test_pass
+
+  mongo-express:
+    image: docker.io/library/mongo-express
+    restart: always
+    depends_on:
+      - database
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: rootpass
+      ME_CONFIG_MONGODB_ADMINUSERNAME: db_you_test
+      ME_CONFIG_MONGODB_ADMINPASSWORD: db_you_test_pass
+      ME_CONFIG_MONGODB_SERVER: database
+      ME_CONFIG_MONGODB_URL: mongodb://db_you_test:db_you_test_pass@database:27017/
+
+  redis:
+    image: redis
+    container_name: cache
+    ports:
+      - 8353:6379
+    expose:
+      - 6379
+volumes:
+  mongo-data:
+  rabbit-data:
