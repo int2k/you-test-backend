@@ -2,7 +2,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { v4 as uuid } from 'uuid';
 import { IsEmail } from 'class-validator';
-import * as bcrypt from 'bcrypt';
 
 @Schema({
   toJSON: {

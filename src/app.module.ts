@@ -5,6 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './module/user/user.module';
 import { AuthModule } from './module/auth/auth.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ChatModule } from './module/chat/chat.module';
 
 @Module({
   imports: [
@@ -16,8 +18,19 @@ import { AuthModule } from './module/auth/auth.module';
         password: process.env.DATABASE_PASS,
       },
     }),
+    ClientsModule.register([
+      {
+        name: 'CHAT_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://localhost:5672'],
+          queue: 'chat_queue',
+        },
+      },
+    ]),
     UserModule,
     AuthModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
