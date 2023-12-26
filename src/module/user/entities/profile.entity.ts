@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { UserEntity, UserSchema } from './user.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Schema({
   toJSON: {
@@ -36,12 +37,6 @@ export class ProfileEntity {
 
   @Prop({ type: [String] })
   interests: string[];
-
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' }) // Ensure 'ref' is set to 'User'
-  userId: MongooseSchema.Types.ObjectId;
-
-  @Prop({ type: UserSchema }) // Reference the UserSchema
-  user: UserEntity; // This will be populated with the User object
 }
 
 export type ProfileDocument = ProfileEntity & Document;

@@ -6,6 +6,7 @@ import { getModelToken, MongooseModule } from '@nestjs/mongoose';
 import { UserEntity, UserSchema } from './entities/user.entity';
 import { Model } from 'mongoose';
 import { mockUser } from './test-utils/mockUser';
+import { ProfileEntity } from './entities/profile.entity';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -20,6 +21,16 @@ describe('UserController', () => {
         UserService,
         {
           provide: getModelToken(UserEntity.name),
+          useValue: {
+            new: jest.fn().mockResolvedValue(mockUser),
+            constructor: jest.fn().mockResolvedValue(mockUser),
+            find: jest.fn(),
+            create: jest.fn(),
+            exec: jest.fn(),
+          },
+        },
+        {
+          provide: getModelToken(ProfileEntity.name),
           useValue: {
             new: jest.fn().mockResolvedValue(mockUser),
             constructor: jest.fn().mockResolvedValue(mockUser),

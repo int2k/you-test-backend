@@ -8,7 +8,11 @@ import {
   MessageDocument,
   MessageSchema,
 } from './entities/message.entity';
-import { UserEntity, UserDocument, UserSchema } from '../user/entities/user.entity';
+import {
+  UserEntity,
+  UserDocument,
+  UserSchema,
+} from '../user/entities/user.entity';
 import { mockUser } from '../user/test-utils/mockUser';
 
 describe('MessagesService', () => {
@@ -22,7 +26,16 @@ describe('MessagesService', () => {
         MessagesService,
         {
           provide: getModelToken(MessageEntity.name),
-          useValue: Model,
+          useValue: {
+            new: jest.fn().mockResolvedValue(mockUser),
+            constructor: jest.fn().mockResolvedValue(mockUser),
+            find: jest.fn().mockImplementation(() => ({
+              populate: jest.fn(),
+            })),
+            findOneUser: jest.fn(),
+            create: jest.fn(),
+            exec: jest.fn(),
+          },
         },
         {
           provide: getModelToken(UserEntity.name),
@@ -60,7 +73,9 @@ describe('MessagesService', () => {
 
   describe('getMessages', () => {
     it('should return an array of messages', async () => {
-      const result = [{ content: 'Hello', timestamp: new Date() }] as MessageEntity[];
+      const result = [
+        { content: 'Hello', timestamp: new Date() },
+      ] as MessageEntity[];
       jest.spyOn(messageModel, 'find').mockReturnValue({
         exec: jest.fn().mockResolvedValue(result),
       } as any);

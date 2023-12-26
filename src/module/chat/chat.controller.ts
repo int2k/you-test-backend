@@ -12,6 +12,8 @@ import { RabbitMQService } from './rabbit-mq.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('chat')
+@UseGuards(JwtAuthGuard)
+@ApiHeader({ name: 'x-access-token', description: 'Authentication token' })
 @Controller('api')
 export class ChatController {
   constructor(
@@ -20,7 +22,6 @@ export class ChatController {
   ) {}
 
   @Get('viewMessages')
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get all chat messages' })
   @ApiResponse({ status: 200, description: 'Returns all chat messages.' })
   async getMessages() {
@@ -28,10 +29,8 @@ export class ChatController {
   }
 
   @Post('sendMessage')
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new chat message' })
   @ApiResponse({ status: 201, description: 'Returns the created message.' })
-  @ApiHeader({ name: 'x-access-token', description: 'Authentication token' })
   async createMessage(
     @Body() messageDto: { username: string; content: string },
   ) {

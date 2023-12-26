@@ -12,8 +12,8 @@ export type MessageDocument = MessageEntity & Document;
   timestamps: true,
 })
 export class MessageEntity {
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'UserEntity' })
-  userId: MongooseSchema.Types.ObjectId;
+  @Prop({ type: String, ref: 'UserEntity' })
+  userId: string;
 
   @Prop({ type: UserSchema }) // Reference the UserSchema
   user: UserEntity; // This will be populated with the User object

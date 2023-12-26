@@ -1,0 +1,70 @@
+POST http://localhost:4000/api/register
+content-type: application/json
+
+{
+  "username": "heri11",
+  "email": "hheri111@gmail.com",
+  "password": "r4h451401"
+}
+
+
+####
+POST http://localhost:4000/api/login
+content-type: application/json
+
+{
+  "username": "heri11",
+  "password": "r4h451401"
+}
+####
+POST http://localhost:4000/api/login
+content-type: application/json
+
+{
+  "username": "hheri111@gmail.com",
+  "password": "r4h451401"
+}
+
+###
+GET http://localhost:4000/api/user
+x-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlcmkxMSIsInN1YiI6IjhkNjZkMDQ3LWVjNTMtNGVlNy04NTE3LWY2ZThjMzZhMzFiZSIsImlhdCI6MTcwMzU5ODQwNiwiZXhwIjoxNzAzNjg0ODA2fQ.8GN1UkQyczruaf7s_hBr399f0W_Ttqds3ItueYbHXKw
+
+
+####
+GET http://localhost:4000/api/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlcmkxMSIsInN1YiI6ImZkNGY1MzJlLWJiYWMtNGU5OS1iY2YwLWVhZDcyODEyMTc1ZSIsImlhdCI6MTcwMzU4NzUxMCwiZXhwIjoxNzAzNjczOTEwfQ.rrBltOTVOsJSpAy1-tUdqSLiEQyH1-eWEo20wrDRDMw
+
+####
+GET http://localhost:4000/api/getProfile
+x-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlcmkxMSIsInN1YiI6IjhkNjZkMDQ3LWVjNTMtNGVlNy04NTE3LWY2ZThjMzZhMzFiZSIsImlhdCI6MTcwMzU5ODQwNiwiZXhwIjoxNzAzNjg0ODA2fQ.8GN1UkQyczruaf7s_hBr399f0W_Ttqds3ItueYbHXKw
+
+####
+POST http://localhost:4000/api/createProfile
+x-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlcmkxMSIsInN1YiI6IjhkNjZkMDQ3LWVjNTMtNGVlNy04NTE3LWY2ZThjMzZhMzFiZSIsImlhdCI6MTcwMzU5ODQwNiwiZXhwIjoxNzAzNjg0ODA2fQ.8GN1UkQyczruaf7s_hBr399f0W_Ttqds3ItueYbHXKw
+content-type: application/json
+
+{
+  "name": "string",
+  "birthday": "2020-12-21",
+  "height": 0,
+  "weight": 0,
+  "interests": [
+    "string"
+  ]
+}
+
+###
+####
+PUT http://localhost:4000/api/updateProfile
+x-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlcmkxMSIsInN1YiI6IjhkNjZkMDQ3LWVjNTMtNGVlNy04NTE3LWY2ZThjMzZhMzFiZSIsImlhdCI6MTcwMzU5ODQwNiwiZXhwIjoxNzAzNjg0ODA2fQ.8GN1UkQyczruaf7s_hBr399f0W_Ttqds3ItueYbHXKw
+content-type: application/json
+
+{
+  "name": "fgfgf 21334334",
+  "birthday": "2020-12-21",
+  "height": 0,
+  "weight": 0,
+  "interests": [
+
+  ]
+}

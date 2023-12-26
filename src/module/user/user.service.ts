@@ -1,21 +1,22 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserEntity } from './entities/user.entity';
 import { Model } from 'mongoose';
+import { RegisterDto } from './dto/register.dto';
+import { ProfileEntity } from './entities/profile.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(UserEntity.name) private userModel: Model<UserEntity>) {}
+  constructor(
+    @InjectModel(UserEntity.name) private userModel: Model<UserEntity>,
+    @InjectModel(ProfileEntity.name) private profileModel: Model<ProfileEntity>,
+  ) {}
 
-  create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const createdUser = new this.userModel(createUserDto);
+  create(dto: RegisterDto): Promise<UserEntity> {
+    const createdUser = new this.userModel(dto);
     return createdUser.save();
-  }
-
-  findAll(): Promise<UserEntity[]> {
-    return this.userModel.find().exec();
   }
 
   findOneUser(query: string) {
@@ -32,11 +33,54 @@ export class UserService {
     return this.userModel.findOne({ _id: id }).exec();
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async createProfile(userId: string, dto: CreateUserDto) {
+    const user = await this.userModel.findOne({ userId }).exec();
+    if (!user) {
+      throw new NotFoundException();
+    }
+    const profile = new this.profileModel(dto);
+
+    user.profile = profile;
+
+    await user.save();
+
+    return profile;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async getProfile(userId: string) {
+    const user = await this.userModel.findOne({ userId }).populate('profile');
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user.profile;
+  }
+
+  async updateProfile(userId, dto: UpdateUserDto) {
+    const user = await this.userModel
+      .findOne({ userId })
+      .populate('profile')
+      .exec();
+    if (!user) {
+      throw new NotFoundException();
+    }
+    if (!user.profile) {
+      throw new NotFoundException();
+    }
+
+    const profile = user.profile;
+    profile.name = dto.name;
+    profile.gender = dto.gender;
+    profile.birthday = new Date(dto.birthday);
+    profile.height = dto.height;
+    profile.weight = dto.weight;
+    profile.interests = dto.interests;
+
+    user.profile = profile;
+
+    user.save();
+
+    return user.profile;
   }
 }

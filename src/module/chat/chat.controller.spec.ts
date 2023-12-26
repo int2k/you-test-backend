@@ -35,7 +35,9 @@ describe('ChatController', () => {
 
   describe('getMessages', () => {
     it('should return an array of messages', async () => {
-      const result = [{ content: 'Hello', timestamp: new Date() }] as MessageEntity[]; // Ensure the correct structure
+      const result = [
+        { content: 'Hello', timestamp: new Date() },
+      ] as MessageEntity[]; // Ensure the correct structure
       jest.spyOn(messagesService, 'getMessages').mockResolvedValue(result);
 
       expect(await controller.getMessages()).toEqual(result); // Use toEqual for array/object comparisons

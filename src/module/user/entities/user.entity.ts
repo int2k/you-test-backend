@@ -2,6 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { v4 as uuid } from 'uuid';
 import { IsEmail } from 'class-validator';
+import { Exclude } from 'class-transformer';
+import { ProfileEntity, ProfileSchema } from './profile.entity';
 
 @Schema({
   toJSON: {
@@ -28,24 +30,11 @@ export class UserEntity {
   email: string;
 
   @Prop({ required: true })
+  @Exclude()
   password: string;
 
-  @Prop({ type: String })
-  displayName: string;
-
-  @Prop({ type: String })
-  gender: string;
-
-  @Prop({ type: Date })
-  birthday: Date;
-
-  @Prop({ type: Number })
-  height: number;
-  @Prop({ type: Number })
-  weight: number;
-
-  @Prop({ type: [String] })
-  interests: string[];
+  @Prop({ type: ProfileSchema })
+  profile: ProfileEntity;
 }
 
 export type UserDocument = UserEntity & Document;

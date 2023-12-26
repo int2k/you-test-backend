@@ -10,20 +10,19 @@ import {
   Request,
 } from '@nestjs/common';
 import { Public } from './decorators/public.decorator';
-import { LoginUserDto } from '../user/dto/login-user.dto';
+import { LoginDto } from '../user/dto/login.dto';
 import { AuthService } from './auth.service';
 import { ValidationPipe } from '../../shared/pipes/validation/validation.pipe';
-import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from '../user/dto/create-user.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { RegisterDto } from '../user/dto/register.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')
 @Controller('api')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
   //
   // @Public()
   // @HttpCode(HttpStatus.OK)
@@ -38,7 +37,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body() loginUserDto: LoginUserDto, @Request() req) {
+  async login(@Body() loginUserDto: LoginDto, @Request() req) {
     // return req.user;
     return this.authService.passportLogin(req.user);
   }
@@ -47,7 +46,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
   @Post('register')
-  register(@Body() createUserDto: CreateUserDto) {
-    return this.authService.registerUser(createUserDto);
+  register(@Body() registerDto: RegisterDto) {
+    return this.authService.registerUser(registerDto);
   }
 }
