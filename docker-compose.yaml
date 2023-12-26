@@ -45,12 +45,20 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://db_you_test:db_you_test_pass@database:27017/
 
   redis:
-    image: redis
+    image: docker.io/library/redis
     container_name: cache
     ports:
       - 8353:6379
     expose:
       - 6379
+  rabbitmq:
+    image: docker.io/library/rabbitmq:3.12-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: dev
+      RABBITMQ_DEFAULT_PASS: dev
 volumes:
   mongo-data:
   rabbit-data:

@@ -4,11 +4,11 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MessagesService } from './messages.service';
 import {
-  Message,
+  MessageEntity,
   MessageDocument,
   MessageSchema,
 } from './entities/message.entity';
-import { User, UserDocument, UserSchema } from '../user/entities/user.entity';
+import { UserEntity, UserDocument, UserSchema } from '../user/entities/user.entity';
 import { mockUser } from '../user/test-utils/mockUser';
 
 describe('MessagesService', () => {
@@ -21,11 +21,11 @@ describe('MessagesService', () => {
       providers: [
         MessagesService,
         {
-          provide: getModelToken(Message.name),
+          provide: getModelToken(MessageEntity.name),
           useValue: Model,
         },
         {
-          provide: getModelToken(User.name),
+          provide: getModelToken(UserEntity.name),
           useValue: {
             new: jest.fn().mockResolvedValue(mockUser),
             constructor: jest.fn().mockResolvedValue(mockUser),
@@ -40,9 +40,9 @@ describe('MessagesService', () => {
 
     service = module.get<MessagesService>(MessagesService);
     messageModel = module.get<Model<MessageDocument>>(
-      getModelToken(Message.name),
+      getModelToken(MessageEntity.name),
     );
-    userModel = module.get<Model<UserDocument>>(getModelToken(User.name));
+    userModel = module.get<Model<UserDocument>>(getModelToken(UserEntity.name));
   });
 
   // describe('createMessage', () => {
@@ -60,7 +60,7 @@ describe('MessagesService', () => {
 
   describe('getMessages', () => {
     it('should return an array of messages', async () => {
-      const result = [{ content: 'Hello', timestamp: new Date() }] as Message[];
+      const result = [{ content: 'Hello', timestamp: new Date() }] as MessageEntity[];
       jest.spyOn(messageModel, 'find').mockReturnValue({
         exec: jest.fn().mockResolvedValue(result),
       } as any);

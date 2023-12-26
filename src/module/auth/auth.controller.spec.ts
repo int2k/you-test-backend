@@ -4,7 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
 import { getModelToken } from '@nestjs/mongoose';
-import { User } from '../user/entities/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import { mockUser } from '../user/test-utils/mockUser';
 import { AuthService } from './auth.service';
 
@@ -33,7 +33,7 @@ describe('AuthController', () => {
         },
         AuthService,
         {
-          provide: getModelToken(User.name),
+          provide: getModelToken(UserEntity.name),
           useValue: {
             new: jest.fn().mockResolvedValue(mockUser),
             constructor: jest.fn().mockResolvedValue(mockUser),

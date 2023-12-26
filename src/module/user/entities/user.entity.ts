@@ -10,7 +10,7 @@ import { IsEmail } from 'class-validator';
   },
   timestamps: true,
 })
-export class User {
+export class UserEntity {
   @Prop({
     type: String,
     unique: true,
@@ -48,5 +48,5 @@ export class User {
   interests: string[];
 }
 
-export type UserDocument = User & Document;
-export const UserSchema = SchemaFactory.createForClass(User);
+export type UserDocument = UserEntity & Document;
+export const UserSchema = SchemaFactory.createForClass(UserEntity);

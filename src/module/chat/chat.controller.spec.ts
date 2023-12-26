@@ -4,8 +4,8 @@ import { ChatController } from './chat.controller';
 import { MessagesService } from './messages.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Message } from './entities/message.entity';
-import { User } from '../user/entities/user.entity';
+import { MessageEntity } from './entities/message.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import { RabbitMQService } from './rabbit-mq.service';
 
 describe('ChatController', () => {
@@ -19,11 +19,11 @@ describe('ChatController', () => {
         MessagesService,
         RabbitMQService,
         {
-          provide: getModelToken(Message.name),
+          provide: getModelToken(MessageEntity.name),
           useValue: Model,
         },
         {
-          provide: getModelToken(User.name),
+          provide: getModelToken(UserEntity.name),
           useValue: Model,
         },
       ],
@@ -35,7 +35,7 @@ describe('ChatController', () => {
 
   describe('getMessages', () => {
     it('should return an array of messages', async () => {
-      const result = [{ content: 'Hello', timestamp: new Date() }] as Message[]; // Ensure the correct structure
+      const result = [{ content: 'Hello', timestamp: new Date() }] as MessageEntity[]; // Ensure the correct structure
       jest.spyOn(messagesService, 'getMessages').mockResolvedValue(result);
 
       expect(await controller.getMessages()).toEqual(result); // Use toEqual for array/object comparisons
@@ -48,7 +48,7 @@ describe('ChatController', () => {
       const createdMessage = {
         ...messageDto,
         timestamp: new Date(),
-      } as unknown as Message; // Ensure the correct structure
+      } as unknown as MessageEntity; // Ensure the correct structure
       jest
         .spyOn(messagesService, 'createMessage')
         .mockResolvedValue(createdMessage);

@@ -1,20 +1,16 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UsePipes,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Request,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { ValidationPipe } from '../../shared/pipes/validation/validation.pipe';
-import { LoginUserDto } from './dto/login-user.dto';
-import { HttpException } from '@nestjs/common/exceptions/http.exception';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiBearerAuth()
 @ApiTags('user')
@@ -22,28 +18,12 @@ import { HttpException } from '@nestjs/common/exceptions/http.exception';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @Post()
-  // create(@Body() createUserDto: CreateUserDto) {
-  //   return this.userService.create(createUserDto);
-  // }
-  //
-  // @Get()
-  // findAll() {
-  //   return this.userService.findAll();
-  // }
-  //
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.userService.findOne(+id);
-  // }
-  //
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.userService.update(+id, updateUserDto);
-  // }
-  //
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.userService.remove(+id);
-  // }
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  @UseInterceptors(ClassSerializerInterceptor)
+  profile(@Request() req) {
+    return req.user;
+  }
+
 }

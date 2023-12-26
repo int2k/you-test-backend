@@ -2,24 +2,30 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from './entities/user.entity';
+import { UserEntity } from './entities/user.entity';
 import { Model } from 'mongoose';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(@InjectModel(UserEntity.name) private userModel: Model<UserEntity>) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
+  create(createUserDto: CreateUserDto): Promise<UserEntity> {
     const createdUser = new this.userModel(createUserDto);
     return createdUser.save();
   }
 
-  findAll(): Promise<User[]> {
+  findAll(): Promise<UserEntity[]> {
     return this.userModel.find().exec();
   }
 
   findOneUser(query: string) {
-    return this.userModel.findOne({ username: query, email: query }).exec();
+    return this.userModel
+      .findOne({ $or: [{ username: query }, { email: query }] })
+      .exec();
+  }
+
+  findOneUserId(userId: string) {
+    return this.userModel.findOne({ userId }).exec();
   }
 
   findOne(id: number) {

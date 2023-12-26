@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose'; // Import Schema type from Mongoose
-import { User, UserSchema } from '../../user/entities/user.entity';
+import { UserEntity, UserSchema } from '../../user/entities/user.entity';
 
-export type MessageDocument = Message & Document;
+export type MessageDocument = MessageEntity & Document;
 
 @Schema({
   toJSON: {
@@ -11,12 +11,12 @@ export type MessageDocument = Message & Document;
   },
   timestamps: true,
 })
-export class Message {
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' }) // Ensure 'ref' is set to 'User'
+export class MessageEntity {
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'UserEntity' })
   userId: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: UserSchema }) // Reference the UserSchema
-  user: User; // This will be populated with the User object
+  user: UserEntity; // This will be populated with the User object
 
   @Prop()
   content: string;
@@ -25,4 +25,4 @@ export class Message {
   timestamp: Date;
 }
 
-export const MessageSchema = SchemaFactory.createForClass(Message);
+export const MessageSchema = SchemaFactory.createForClass(MessageEntity);

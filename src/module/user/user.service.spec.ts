@@ -2,13 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 
 import { getModelToken } from '@nestjs/mongoose';
-import { User } from './entities/user.entity';
+import { UserEntity } from './entities/user.entity';
 import { Model } from 'mongoose';
 import { mockUser } from './test-utils/mockUser';
 
 describe('UserService', () => {
   let service: UserService;
-  let userModel: Model<User>;
+  let userModel: Model<UserEntity>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -16,7 +16,7 @@ describe('UserService', () => {
       providers: [
         UserService,
         {
-          provide: getModelToken(User.name),
+          provide: getModelToken(UserEntity.name),
           useValue: {
             new: jest.fn().mockResolvedValue(mockUser),
             constructor: jest.fn().mockResolvedValue(mockUser),
@@ -30,7 +30,7 @@ describe('UserService', () => {
     }).compile();
 
     service = module.get<UserService>(UserService);
-    userModel = module.get<Model<User>>(getModelToken(User.name));
+    userModel = module.get<Model<UserEntity>>(getModelToken(UserEntity.name));
   });
 
   it('should be defined', () => {

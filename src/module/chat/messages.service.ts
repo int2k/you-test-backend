@@ -2,17 +2,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Message, MessageDocument } from './entities/message.entity';
-import { User, UserDocument } from '../user/entities/user.entity';
+import { MessageEntity, MessageDocument } from './entities/message.entity';
+import { UserEntity, UserDocument } from '../user/entities/user.entity';
 
 @Injectable()
 export class MessagesService {
   constructor(
-    @InjectModel(Message.name) private messageModel: Model<MessageDocument>,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(MessageEntity.name) private messageModel: Model<MessageDocument>,
+    @InjectModel(UserEntity.name) private userModel: Model<UserDocument>,
   ) {}
 
-  async createMessage(username: string, content: string): Promise<Message> {
+  async createMessage(username: string, content: string): Promise<MessageEntity> {
     const user = await this.userModel.findOne({ username }).exec();
 
     if (!user) {
@@ -27,7 +27,7 @@ export class MessagesService {
     return createdMessage.save();
   }
 
-  async getMessages(): Promise<Message[]> {
+  async getMessages(): Promise<MessageEntity[]> {
     return this.messageModel.find().populate('user').exec();
   }
 }
